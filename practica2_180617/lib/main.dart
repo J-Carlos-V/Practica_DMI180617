@@ -1,56 +1,24 @@
+
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
-import 'dart:core';
+import 'package:practica2_180617/home_page.dart';
 
-void main() {
-  runApp(
-    MaterialApp(home: HomePage()),
-  );
+void main(){
+  runApp(MyApp());
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List empleadosData;
-
-  getEmpleados() async {
-    http.Response response =
-        await http.get(Uri.parse("http://127.0.0.1:3000/"));
-    Map data = json.decode(response.body);
-    setState(() {
-      empleadosData = data['empleados'];
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getEmpleados();
-  }
+class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Lista de Empleados'),
-        backgroundColor: Colors.purpleAccent[700],
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: '180617',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
       ),
-      body: ListView.builder(
-        itemCount: empleadosData == null ? 0 : empleadosData.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Row(
-              children: <Widget>[Text("${empleadosData[index]["_id"]}")],
-            ),
-          );
-        },
-      ),
+      home: HomePage(),
     );
   }
 }
