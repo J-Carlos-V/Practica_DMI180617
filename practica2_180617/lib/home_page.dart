@@ -114,9 +114,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  Future<List> Empleados() async{
-    var url = Uri.parse("http://192.168.1.64:3000");
+  Future<List> Empleados() async {
+    var url = Uri.parse("http://10.0.2.2:3000/");
     var response = await http.get(url);
     if (response.statusCode == 200) {
       return jsonDecode(utf8.decode(response.bodyBytes));
@@ -124,35 +123,42 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Error');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("APP Empleados 180617"),
-      ),
-      body: FutureBuilder<List>(
-        future: Empleados(),
-        builder: (context, snapshot){
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error al traer Empleados"),
-            );
-          }
+        appBar: AppBar(
+          title: Text("APP Empleados 180617"),
+        ),
+        body: FutureBuilder<List>(
+          future: Empleados(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text("Error al traer Empleados"),
+              );
+            }
 
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index){
-                return ListTile(
-                  title: Text(snapshot.data![index]['nombre']),
-                );
-              },);
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-        )
-    );
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    /*leading: CircleAvatar(backgroundColor: Colors.transparent
+                    backgroundImage: NetworkImage()
+                    ,),*/
+                    title: Text(snapshot.data![index]['nombre']),
+                    subtitle: Text(snapshot.data![index]['salario'].toString()),
+                    trailing: Text("Salario: " +
+                        snapshot.data![index]['salario'].toString()),
+                  );
+                },
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        ));
   }
 }
